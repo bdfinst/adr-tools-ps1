@@ -14,6 +14,10 @@ Import-Module (Join-Path $moduleRoot 'AdrTools.psd1') -Force -ErrorAction Stop
 
 try {
     switch ($Command) {
+        'init' {
+            $dir = if ($Args.Count -gt 0) { $Args[0] } else { 'doc/adr' }
+            Initialize-AdrDirectory -Directory $dir
+        }
         'help' {
             Write-Host 'adr - Architecture Decision Records tool'
             Write-Host ''
