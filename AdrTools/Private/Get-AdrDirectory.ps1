@@ -11,7 +11,10 @@ function Get-AdrDirectory {
         $candidate = Join-Path $dir '.adr-dir'
         if (Test-Path $candidate -PathType Leaf) {
             try {
-                return (Get-Content $candidate -TotalCount 1).Trim()
+                $relPath = (Get-Content $candidate -TotalCount 1).Trim()
+                # Resolve relative to the directory containing .adr-dir so callers
+                # always get an absolute path (needed for [System.IO.File] APIs)
+                return [System.IO.Path]::GetFullPath((Join-Path $dir $relPath))
             } catch {
                 throw "Cannot read '$candidate': $_"
             }
@@ -24,7 +27,7 @@ function Get-AdrDirectory {
     # Fallback: look for doc/adr under the starting directory
     $docAdr = Join-Path $current 'doc' 'adr'
     if (Test-Path $docAdr -PathType Container) {
-        return $docAdr
+        return [System.IO.Path]::GetFullPath($docAdr)
     }
 
     throw "No ADR directory found. Run 'adr init' to create one."

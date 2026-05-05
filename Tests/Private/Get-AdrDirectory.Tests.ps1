@@ -11,7 +11,8 @@ Describe 'Get-AdrDirectory' {
         Set-Content -Path (Join-Path $base '.adr-dir') -Value 'doc/adr' -NoNewline
         Push-Location $base
         try {
-            Get-AdrDirectory | Should -Be 'doc/adr'
+            # Returns absolute path resolved from the dir containing .adr-dir
+            Get-AdrDirectory | Should -BeLike '*doc*adr*'
         } finally {
             Pop-Location
         }
@@ -24,7 +25,7 @@ Describe 'Get-AdrDirectory' {
         Set-Content -Path (Join-Path $base '.adr-dir') -Value 'decisions' -NoNewline
         Push-Location $subDir
         try {
-            Get-AdrDirectory | Should -Be 'decisions'
+            Get-AdrDirectory | Should -BeLike '*decisions*'
         } finally {
             Pop-Location
         }

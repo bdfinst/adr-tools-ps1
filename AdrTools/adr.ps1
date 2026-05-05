@@ -18,6 +18,31 @@ try {
             $dir = if ($Args.Count -gt 0) { $Args[0] } else { 'doc/adr' }
             Initialize-AdrDirectory -Directory $dir
         }
+        'new' {
+            # Parse -s and -l flags from $Args
+            $title      = @()
+            $supersedes = @()
+            $links      = @()
+            $i = 0
+            while ($i -lt $Args.Count) {
+                switch ($Args[$i]) {
+                    { $_ -eq '-s' -or $_ -eq '-Supersedes' } {
+                        $i++; $supersedes += $Args[$i]
+                    }
+                    { $_ -eq '-l' -or $_ -eq '-Link' } {
+                        $i++; $links += $Args[$i]
+                    }
+                    default { $title += $Args[$i] }
+                }
+                $i++
+            }
+            if ($title.Count -eq 0) {
+                [Console]::Error.WriteLine("Usage: adr new [-s N]... [-l T:LINK:REVERSE]... TITLE...")
+                exit 1
+            }
+            $path = New-Adr -Title $title -Supersedes $supersedes -Link $links
+            Write-Host $path
+        }
         'help' {
             Write-Host 'adr - Architecture Decision Records tool'
             Write-Host ''
