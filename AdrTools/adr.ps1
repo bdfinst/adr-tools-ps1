@@ -53,10 +53,47 @@ try {
             }
             Set-AdrLink -Source $Args[0] -LinkText $Args[1] -Target $Args[2] -ReverseLinkText $Args[3]
         }
+        'generate' {
+            $sub = if ($Args.Count -gt 0) { $Args[0] } else { '' }
+            $rest = if ($Args.Count -gt 1) { $Args[1..($Args.Count-1)] } else { @() }
+            switch ($sub) {
+                'toc' {
+                    $prefix = ''; $intro = ''; $outro = ''
+                    $j = 0
+                    while ($j -lt $rest.Count) {
+                        switch ($rest[$j]) {
+                            '-p' { $j++; $prefix = $rest[$j] }
+                            '-i' { $j++; $intro  = $rest[$j] }
+                            '-o' { $j++; $outro  = $rest[$j] }
+                        }
+                        $j++
+                    }
+                    Write-Host (Get-AdrToc -Prefix $prefix -Intro $intro -Outro $outro)
+                }
+                'graph' {
+                    $prefix = ''; $ext = '.html'
+                    $j = 0
+                    while ($j -lt $rest.Count) {
+                        switch ($rest[$j]) {
+                            '-p' { $j++; $prefix = $rest[$j] }
+                            '-e' { $j++; $ext    = $rest[$j] }
+                        }
+                        $j++
+                    }
+                    Write-Host (Get-AdrGraph -Prefix $prefix -Extension $ext)
+                }
+                default {
+                    [Console]::Error.WriteLine("Unknown generate subcommand: $sub. Use 'toc' or 'graph'.")
+                    exit 1
+                }
+            }
+        }
+        'upgrade-repository' {
+            Update-AdrRepository
+        }
         'help' {
-            Write-Host 'adr - Architecture Decision Records tool'
-            Write-Host ''
-            Write-Host 'Commands: init, new, list, link, generate, upgrade-repository, help'
+            $cmd = if ($Args.Count -gt 0) { $Args[0] } else { '' }
+            Write-Host (Get-AdrHelp -Command $cmd)
         }
         default {
             [Console]::Error.WriteLine("Unknown command: $Command")

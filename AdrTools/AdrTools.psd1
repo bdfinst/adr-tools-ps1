@@ -6,5 +6,14 @@
     PowerShellVersion    = '5.1'
     CompatiblePSEditions = @('Desktop', 'Core')
     RootModule           = 'AdrTools.psm1'
-    FunctionsToExport    = @('Initialize-AdrDirectory','New-Adr','Get-AdrList','Set-AdrLink')
+    FunctionsToExport    = @(
+        'Initialize-AdrDirectory',
+        'New-Adr',
+        'Get-AdrList',
+        'Set-AdrLink',
+        'Get-AdrToc',
+        'Get-AdrGraph',
+        'Update-AdrRepository',
+        'Get-AdrHelp'
+    )
 }
