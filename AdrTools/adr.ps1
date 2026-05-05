@@ -43,6 +43,16 @@ try {
             $path = New-Adr -Title $title -Supersedes $supersedes -Link $links
             Write-Host $path
         }
+        'list' {
+            Get-AdrList | ForEach-Object { Write-Host $_ }
+        }
+        'link' {
+            if ($Args.Count -lt 4) {
+                [Console]::Error.WriteLine("Usage: adr link SOURCE LINK TARGET REVERSE-LINK")
+                exit 1
+            }
+            Set-AdrLink -Source $Args[0] -LinkText $Args[1] -Target $Args[2] -ReverseLinkText $Args[3]
+        }
         'help' {
             Write-Host 'adr - Architecture Decision Records tool'
             Write-Host ''
