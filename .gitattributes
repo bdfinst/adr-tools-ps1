@@ -1,0 +1,6 @@
+# Preserve LF line endings in golden fixture regardless of OS checkout settings
+Tests/Fixtures/golden-adr.md -text
+
+# Pester vendor: treat binary files as binary
+tools/Pester/**/*.dll binary
+tools/Pester/**/*.pdb binary
