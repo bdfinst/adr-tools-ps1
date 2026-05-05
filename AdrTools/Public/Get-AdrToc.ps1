@@ -20,7 +20,7 @@ function Get-AdrToc {
     }
 
     $lines += ''
-    foreach ($adrPath in Get-AdrList) {
+    foreach ($adrPath in @(Get-AdrList)) {   # force array for single-item case
         $title    = Get-AdrTitle -Path $adrPath
         $basename = [System.IO.Path]::GetFileName($adrPath)
         $lines += "* [$title]($Prefix$basename)"

@@ -4,7 +4,7 @@ function Get-AdrGraph {
         [string]$Extension = '.html'
     )
 
-    $adrs = Get-AdrList
+    $adrs = @(Get-AdrList)   # force array — single-item returns bare string otherwise
     $lines = @('digraph {')
 
     # Emit nodes
